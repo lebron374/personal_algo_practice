@@ -207,13 +207,32 @@ public class TreeProgram {
      * @param root
      * @return
      */
-    public void findCommonParent(TreeNode<Integer> root, Integer node1, Integer node2) {
+    public TreeNode<Integer> findCommonParent(TreeNode<Integer> root, Integer node1, Integer node2) {
 
-        if (root.data.equals(node1) && root.data.equals(node2)) {
-            System.out.println(root.data);
-
-            return;
+        // root==null说明已经遍历到叶子节点的子节点了
+        // 其他两种情况说明找到root节点等于待查找的节点
+        if (null == root || root.data.equals(node1) || root.data.equals(node2)) {
+            return root;
         }
+
+        // 从底层慢慢查找然后网上回溯就行
+        TreeNode<Integer> left = findCommonParent(root.leftChild, node1, node2);
+        TreeNode<Integer> right = findCommonParent(root.rightChild, node1, node2);
+
+        // 如果当前节点的左右子树都包含节点的一部分，说明当前节点就是父节点
+        if (null != left && null != right) {
+            return root;
+        }
+
+        if (null != left) {
+            return left;
+        }
+
+        if (null != right) {
+            return right;
+        }
+
+        return null;
     }
 
     /**
@@ -271,6 +290,35 @@ public class TreeProgram {
         return bRet;
     }
 
+    private TreeNode<Integer> pHead = null;
+    private TreeNode<Integer> pTail = null;
+
+    public void treeToList(TreeNode<Integer> root) {
+
+        if (null == root) {
+            return;
+        }
+
+        // 先遍历左子树
+        treeToList(root.leftChild);
+
+        // 处理中间节点
+        if (null == pHead) {
+            pHead = root;
+        }
+
+        if (null == pTail) {
+            pTail = root;
+        }else {
+            pTail.rightChild = root;
+            root.leftChild = pTail;
+            pTail = root;
+        }
+
+        // 最后遍历右子树
+        treeToList(root.rightChild);
+    }
+
     public static void main(String[] args) {
 
         TreeProgram treeProgram = new TreeProgram();
@@ -296,5 +344,13 @@ public class TreeProgram {
 
         System.out.println("findCommonParentV2");
         treeProgram.findCommonParentV2(root, 6, 8);
+
+        System.out.println("findCommonParent");
+        treeProgram.findCommonParentV2(root, 6, 8);
+
+        System.out.println("treeToList");
+        treeProgram.treeToList(root);
+
+        System.out.println(treeProgram.pHead.data);
     }
 }
