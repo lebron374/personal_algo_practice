@@ -292,7 +292,6 @@ public class TreeProgram {
 
     private TreeNode<Integer> pHead = null;
     private TreeNode<Integer> pTail = null;
-
     public void treeToList(TreeNode<Integer> root) {
 
         if (null == root) {
@@ -317,6 +316,33 @@ public class TreeProgram {
 
         // 最后遍历右子树
         treeToList(root.rightChild);
+    }
+
+
+    public void findDataPath(TreeNode<Integer> root, int value, int sum, Deque<Integer> path) {
+
+        // 查找到叶子节点后判断值是否相等，相当后就打印路径
+        if (null == root) {
+            if (value == sum) {
+                while (!path.isEmpty()) {
+                    System.out.println(path.pop());
+                }
+
+                System.out.println("---------------");
+            }
+
+            return;
+        }
+
+        // 将这层的节点加入到栈中
+        path.addLast(root.data);
+        int temp = sum + root.data;
+
+        findDataPath(root.leftChild, value, temp, path);
+        findDataPath(root.rightChild, value, temp, path);
+
+        // 将这层的节点从栈中剔除
+        path.pollLast();
     }
 
     public static void main(String[] args) {
@@ -349,8 +375,9 @@ public class TreeProgram {
         treeProgram.findCommonParentV2(root, 6, 8);
 
         System.out.println("treeToList");
-        treeProgram.treeToList(root);
+//        treeProgram.treeToList(root);
 
-        System.out.println(treeProgram.pHead.data);
+        System.out.println("findDataPath");
+        treeProgram.findDataPath(root, 20, 0, new ArrayDeque<Integer>());
     }
 }
