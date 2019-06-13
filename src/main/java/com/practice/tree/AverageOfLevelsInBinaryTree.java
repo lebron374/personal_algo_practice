@@ -32,7 +32,7 @@ public class AverageOfLevelsInBinaryTree {
         while (!nodeDeque.isEmpty()) {
             int size = nodeDeque.size();
             int count = size;
-            int sum = 0;
+            double sum = 0;
             while (size > 0) {
                 TreeNode treeNode = nodeDeque.poll();
                 sum += treeNode.val;
