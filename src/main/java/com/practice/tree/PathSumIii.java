@@ -13,22 +13,37 @@ public class PathSumIii {
         TreeNode(int x) { val = x; }
     }
 
+    int num = 0;
     public int pathSum(TreeNode root, int sum) {
 
-        // 以根节点，根左子节点，根右子节点 作为起始节点的数量之和
-        return getPathSum(root, sum) + getPathSum(root.left, sum) + getPathSum(root.right, sum);
-    }
-
-    public int getPathSum(TreeNode root, int sum) {
         if (null == root) {
             return 0;
         }
 
-        if (sum == root.val) {
-            return 1;
+        // 以根节点计算数量
+        getPathSum(root, sum);
+
+        // 遍历左子树
+        pathSum(root.left, sum);
+
+        // 遍历右子树
+        pathSum(root.right, sum);
+
+        return num;
+    }
+
+    public void getPathSum(TreeNode root, int sum) {
+        if (null == root) {
+            return;
         }
 
-        return getPathSum(root.left, sum - root.val) + getPathSum(root.right, sum - root.val);
+        if (sum == root.val) {
+            num += 1;
+        }
+
+        getPathSum(root.left, sum - root.val);
+
+        getPathSum(root.right, sum - root.val);
     }
 
 }
