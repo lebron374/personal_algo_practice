@@ -24,7 +24,11 @@ public class PathSumIii {
             return 0;
         }
 
-        return (root.val == sum ? 1:0) + getPathSum(root.left, sum - root.val) + getPathSum(root.right, sum - root.val);
+        if (sum == root.val) {
+            return 1;
+        }
+
+        return getPathSum(root.left, sum - root.val) + getPathSum(root.right, sum - root.val);
     }
 
 }
